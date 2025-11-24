@@ -1,0 +1,24 @@
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    ports:
+      - 5555:5000
+    command: mlflow server --host 0.0.0.0
+
+  fastapi:
+    image: sarangcroft555/fastapi:dev3
+    build:
+      context: "../"
+      dockerfile: "Dockerfile"
+    ports:
+      - "8000:8000"
+
+  streamlit:
+    image: sarangcroft555/streamlit:dev3
+    build:
+      context: "../streamlit_app"
+      dockerfile: "Dockerfile"
+    environment:
+      API_URL: "http://fastapi:8000"
+    ports:
+      - "8501:8501"
